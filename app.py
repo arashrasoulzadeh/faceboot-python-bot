@@ -40,7 +40,7 @@ def webhook():
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
-                    send_message(sender_id, "roger that!")
+                    send_message(sender_id, "test")
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
@@ -69,7 +69,26 @@ def send_message(recipient_id, message_text):
             "id": recipient_id
         },
         "message": {
-            "text": message_text
+            "attachment": {
+                      "type":"template",
+                          "payload":{
+                            "template_type":"button",
+                            "text":"یه مشت دکمه",
+                            "buttons":[
+                              {
+                                "type":"web_url",
+                                "url":"https://www.google.com",
+                                "title":"گوگل"
+                              },
+                              {
+                                "type":"web_url",
+                                "url":"https://www.yahoo.com",
+                                "title":"یاهو"
+                              }
+                            ]
+                          }
+
+                }
         }
     })
     r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
@@ -94,4 +113,4 @@ if __name__ == '__main__':
     print(os.environ["PAGE_ACCESS_TOKEN"]);
     print(os.environ["VERIFY_TOKEN"]);
 
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
